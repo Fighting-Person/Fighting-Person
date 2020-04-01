@@ -123,19 +123,20 @@ void Shop(){
 		ItemNumber++;
 	}
 	in();
-	sale:
+	//sale:
 		printpause("Which?");
 		if (entry == '1'){
-			if (SaleOK){
+			//if (SaleOK(pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price))
 				player.inven.WeaponTotal++;
 				player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
-				player.inven.Weapon[(player.inven.WeaponTotal-1)] = DAGGER;
-				player.Wielding = pWeapon[DAGGER];
+				player.inven.Weapon[(player.inven.WeaponTotal-1)] = WeaponList[0];
+				player.Wielding = pWeapon[player.inven.Weapon[(player.inven.WeaponTotal-1)]]; //whew
 
-				printpause("You arm yourself with dagger.");
+				printf("You arm yourself with %s.",player.Wielding->name);
+				nl();
 			}
-			goto sale;	
-		}
+
+		
 }
 
 //end
