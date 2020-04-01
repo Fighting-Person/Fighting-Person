@@ -10,6 +10,7 @@ int main(){
 		buildworld();
 		LoadWeaponArray();
 		LoadMonsterArray();
+		LoadArmorArray();
 	restart:
 		buildplayer();
 		location.x=location.y=0;
@@ -30,7 +31,7 @@ int main(){
 				case 'l': //look
 					continue;
 				case 'u': // 0301
-				case 'n': 
+				case 'v': 
 				case 'f': 
 				case 'j':
 					Move();
@@ -117,7 +118,7 @@ void playerstatus(){
 	nl();
 	printf("XP %i",player.xp); 
 	nl();
-	printf("AC %i", player.AC);
+	printf("AC %i", player.ac);
 	nl();
 	return;
 }
@@ -139,7 +140,9 @@ void printHP(){
 	return;
 }
 void ReportInventory(void){
-	printf("Wielding: %s", player.Wielding->name);
+	printf("Wielding %s", player.Wielding->name);
+	nl();
+	printf("Wearing %s", player.Wearing->name);
 	nl();
 }
 //end

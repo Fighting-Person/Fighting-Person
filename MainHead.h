@@ -10,8 +10,7 @@
 
 enum abilities {str,dex,con, NUM_ABILITY};
 enum ztype {CAMP, TOWN, HOME};
-enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};
-enum monsters {BAT,FIRE_BEETLE,GOBLIN, M_ENUMSIZE};
+
 // enum end
 
 typedef const char* string;
@@ -26,6 +25,8 @@ struct MonsterData {
 	int con;
 	int xp;
 	int weapon;
+int armor;
+	int shield;
 };
 
 struct WeaponData {
@@ -36,12 +37,19 @@ struct WeaponData {
 	string name;
 };
 
-struct ArmourData{
+struct ArmorData{
 	string name;
 	int ac;
 	int weight;
 	int price;
-}; // armourdata
+}; // Armordata
+
+struct ShieldData{
+string name;
+int ac;
+int weight;
+int price;
+}; // ShieldData
 
 typedef struct { //sheet
 	struct {
@@ -51,7 +59,7 @@ typedef struct { //sheet
 	int ability[NUM_ABILITY];
 	int initiative;
 	string name;
-	int AC;
+	int ac;
 	int xp;
 	int level;
 	int gp;
@@ -60,14 +68,15 @@ typedef struct { //sheet
 	struct { //inv
 		int* Weapon;
 		int WeaponTotal;
-		int* Armour;
-		int ArmourTotal;
+		int* Armor;
+		int ArmorTotal;
 		int* Shield;
 		int ShieldTotal;
 		} inven;
 	struct WeaponData* Wielding;
-	//struct ArmourData* Wearing;
-} sheet;
+	struct ArmorData* Wearing;
+struct ShieldData *LeftHand; // dunno
+	} sheet;
 
 struct LocationType {
 	string description;
@@ -84,7 +93,11 @@ typedef struct {
 // toc
 void in(void);
 void printpause(string);
+void showprimary(void); // 0302
 void nl(void);	//0308
+void playerstatus(void); 
+void printcoordinates(void); //0316
+void printHP(void); // 0319
 void ReportInventory(void); //0326
 
 // World.h
@@ -100,16 +113,13 @@ void rollprimary(void);
 //void primarynamemod(sheet* );
 int atleast(int,int);
 void printprompt(string); // 0301
-void showprimary(void); // 0302
 int multdiemod(int,int,int); //0304
-void playerstatus(void); 
-void printcoordinates(void); //0316
-void printHP(void); // 0319
 
 // Init.h
 void buildplayer(void); // 0229
 void LoadWeaponArray(void); //0322
 void LoadMonsterArray(void); //0322
+void LoadArmorArray(void); //0331
 
 // globals
 
@@ -119,8 +129,13 @@ char entry;
 coordinates location;
 struct LocationType matrix[worldsize][worldsize]; // 03/14
 
+enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};
+enum monsters {BAT,FIRE_BEETLE,GOBLIN, M_ENUMSIZE};
+enum armor {NONE, LEATHER, CHAIN_SHIRT, CHAIN_MAIL, A_ENUMSIZE};
+
 struct WeaponData *pWeapon[W_ENUMSIZE];
 struct MonsterData *pMonster[M_ENUMSIZE];
+struct ArmorData *pArmor[A_ENUMSIZE];
 
 sheet player;
 

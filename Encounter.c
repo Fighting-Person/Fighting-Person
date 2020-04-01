@@ -1,4 +1,5 @@
-//combat.c
+// Encounter.c
+
 #include "MainHead.h"
 
 #define HALF .5
@@ -35,7 +36,7 @@ int atleast(int minimum, int result){
 	}
 void Attack(sheet *attacker, sheet *defender){ // called from Combat()
 	int attack = rollmod(20, attacker->ability[dex]);
-	if (attack <= defender->AC){
+	if (attack <= defender->ac){
 		printf("%s misses!",attacker->name);
 		in();
 		return;
@@ -96,12 +97,11 @@ void Combat(sheet* player, sheet* opponent){ // called from EncounterLoop ('a')
 void buildabear(struct MonsterData *fill, sheet* opponent){ // called from Encounter()
 	opponent->name = fill->name;
 	opponent->size = fill->size;
-	opponent->AC = fill->ac;
+	opponent->ac = fill->ac;
 	opponent->level = fill->level;
 	opponent->ability[str] = fill->str;
 	opponent->ability[dex] = fill->dex;
 	opponent->ability[con] = fill->con;
-	//primarynamemod(opponent);
 	opponent->hp.max = opponent->hp.current = 
 		atleast(1, (multdiemod(opponent->level,
 		opponent->size,opponent->ability[con])));
@@ -145,7 +145,7 @@ void Encounter(){ // called from Move()
 			ShowOpponentStatus(&opponent);	
 			continue;
 			case 'u': // 0301
-			case 'n': 
+			case 'v': 
 			case 'f': 
 			case 'j':
 			printprompt("You're currently in an encounter.");

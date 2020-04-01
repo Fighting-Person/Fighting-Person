@@ -8,6 +8,7 @@
 void FillLocation(struct LocationType*,int ,int);
 void printboundary(string);
 bool InBounds(string, coordinates);
+bool SaleOK(string , int );
 
 // LocationType {string name, int encounterrate, int move, int zmode (camp,town,home)}
 struct LocationType woods = {"Woods", ENCOUNTER_RATE, 1, CAMP};
@@ -64,7 +65,7 @@ void Move(){
 	coordinates new = {0,0};
 	switch(entry){
 		case 'u': new.y = 1; direction = "north"; break;
-		case 'n': new.y = -1; direction = "south"; break;
+		case 'v': new.y = -1; direction = "south"; break;
 		case 'f': new.x = -1; direction = "west"; break;
 		case 'j': new.x = 1; direction = "east"; break;
 	}
@@ -89,36 +90,51 @@ void Move(){
 
 	return;
 }
+bool SaleOK(string name, int price){
+	printf("Buy %s?",name);
+	in();
+	if (entry == 'y'){
+		if (player.gp < price){
+			printpause("Insufficient funds.");
+			return false;
+		}
+		player.gp -= price;
+		return true;
+	}
+	return false;
+}
 void Shop(){
 	// check if at shop location
-	if  ((location.x != 1) && (location.y != 0))
+	if  ( !(location.x == 1 && location.y == 0) )
 		return;
 	printpause("Welcome to the shop. :)");
-	int for_sale = DAGGER;
-	printf("#1  %s - %i gp",pWeapon[for_sale]->name,pWeapon[for_sale]->price);
+	int ItemNumber = 1;
+	// do weapons
+	int WeaponList[] = {DAGGER};
+	printf("#%i %s - %i gp",ItemNumber,pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price);
+	nl();
+	ItemNumber++;
+	// do armor
+	int ArmorList[] = {LEATHER, CHAIN_SHIRT, CHAIN_MAIL};
+	int loop = sizeof(ArmorList)/sizeof(ArmorList[0]);
+	for (int x = 0; x < loop; x++){
+		printf("#%i %s - %i gp",ItemNumber,pArmor[ArmorList[x]]->name,pArmor[ArmorList[x]]->price);
+		nl();
+		ItemNumber++;
+	}
 	in();
 	sale:
 		printpause("Which?");
 		if (entry == '1'){
-			printf("Buy %s?",pWeapon[for_sale]->name);
-			in();
-				if (entry == 'y'){
+			if (SaleOK){
+				player.inven.WeaponTotal++;
+				player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
+				player.inven.Weapon[(player.inven.WeaponTotal-1)] = DAGGER;
+				player.Wielding = pWeapon[DAGGER];
 
-					if (player.gp < pWeapon[for_sale]->price){
-						printpause("Insufficient funds.");
-						goto sale;
-					}
-					player.gp -= pWeapon[for_sale]->price;
-
-					player.inven.WeaponTotal++;
-					player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
-					player.inven.Weapon[(player.inven.WeaponTotal-1)] = DAGGER;
-					player.Wielding = pWeapon[DAGGER];
-
-					printpause("You arm yourself with dagger.");
-				}
-				if (entry == 'n')
-					goto sale;
+				printpause("You arm yourself with dagger.");
+			}
+			goto sale;	
 		}
 }
 
