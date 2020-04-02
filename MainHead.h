@@ -90,6 +90,8 @@ typedef struct {
 	int y;
 } coordinates;
 
+// end struct
+
 // toc
 void in(void);
 void printpause(string);
@@ -120,6 +122,7 @@ void buildplayer(void); // 0229
 void LoadWeaponArray(void); //0322
 void LoadMonsterArray(void); //0322
 void LoadArmorArray(void); //0331
+void DoAC(void);
 
 // globals
 

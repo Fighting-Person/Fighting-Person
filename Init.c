@@ -53,96 +53,9 @@ void LoadArmorArray(void){
 	// add Armor array
 }
 // Generate Char
-/*void rollprimary(){
-	// (4d6 - lowest) new school (low dex makes game annoying)
-	const int NUM_DICE = 4;
-	int die[NUM_DICE], result[NUM_DICE];
-	int x,y;
-	for (x=0;x<NUM_ABILITY;x++){
-		//player.ability[x].score = multdiemod(3,6,0);
-		for (y=0;y<NUM_DICE;y++){
-			die[y] = rollmod(6,0);
-			} // 4 die rolled
-		
-		result[0] = die[0]+die[1]+die[2];
-		result[1] = die[0]+die[1]+die[3];
-		result[2] = die[0]+die[2]+die[3];
-		result[3] = die[1]+die[2]+die[3];
-		for(int z=0;z<NUM_DICE;z++){
-			printf("set %i result %i",z,result[z]);
-			nl();
-			}
-		if ((result[0] >= result[1]) && (result[0] >= result[2]) && (result[0] >= result[3])){
-			player.ability[x].score = result[0];
-			continue;
-			}
-		if ((result[1] >= result[0]) && (result[1] >= result[2]) && (result[1] >= result[3])){
-			player.ability[x].score = result[1];
-			continue;
-			} // 1
-		if ((result[2] >= result[0]) && (result[2] >= result[1]) && (result[2] >= result[3])){
-			player.ability[x].score = result[2];
-			continue;
-			} // 2
-		if ((result[3] >= result[0]) && (result[3] >= result[1]) && (result[3] >= result[2])){
-			player.ability[x].score = result[3];
-			continue;
-			} // 3
-		} // end x
-		//if (player.ability[dex].score < 9)
-		//player.ability[dex].score = 9;
-
-		
-	} // end fx
-int getbonus(int stat){
-	int bonus=0;
-	switch(stat){
-		case 1:
-			bonus = -5;
-			break;
-		case 2: case 3:
-			bonus = -4;
-			break;
-		case 4: case 5:
-			bonus = -3;
-			break;
-		case 6: case 7:
-			bonus = -2;
-			break;
-		case 8: case 9:
-			bonus = -1;
-			break;
-		case 10: case 11:
-			bonus = 0;
-			break;
-		case 12:
-			bonus = 1;
-			break;
-		case 13: case 14:
-			bonus = 2;
-			break;
-		case 15:	case 16:
-			bonus = 3;
-			break;
-		case 17: case 18:
-			bonus = 4;
-			break;
-		default:
-		if ( stat < 3 || stat > 18)
-			printpause("stat value out of expected range.");
-		
-			}
-	return bonus;
-	}
-//void primarynamemod(sheet* who){ 
-	
-	for (int x=0;x<NUM_ABILITY;x++){
-		who->ability[x].mod = getbonus(who->ability[x].score);
-		who->ability[x].name = name[x];
-	
-		}
-	return;
-	}*/
+void DoAC(){
+	player.ac = player.Wearing->ac + player.ability[dex];
+}
 void buildplayer(){ // from main()
 	player.alive = true;
 	player.name = "Player";
@@ -161,7 +74,7 @@ void buildplayer(){ // from main()
 	player.inven.Weapon = calloc(player.inven.WeaponTotal,sizeof(int));
 	player.inven.Weapon[(player.inven.WeaponTotal-1)] = FIST;
 	player.Wearing = pArmor[NONE];
-	player.ac = player.Wearing->ac + player.ability[dex];
+	DoAC();
 	return;
 }
 

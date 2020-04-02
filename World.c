@@ -8,7 +8,8 @@
 void FillLocation(struct LocationType*,int ,int);
 void printboundary(string);
 bool InBounds(string, coordinates);
-bool SaleOK(string , int );
+int SaleOK(string , int );
+
 
 // LocationType {string name, int encounterrate, int move, int zmode (camp,town,home)}
 struct LocationType woods = {"Woods", ENCOUNTER_RATE, 1, CAMP};
@@ -90,20 +91,22 @@ void Move(){
 
 	return;
 }
-bool SaleOK(string name, int price){
+int SaleOK(string name, int price){
 	printf("Buy %s?",name);
 	in();
 	if (entry == 'y'){
 		if (player.gp < price){
 			printpause("Insufficient funds.");
-			return false;
+			return 0;
 		}
 		player.gp -= price;
-		return true;
+		return 1;
 	}
-	return false;
+	return 2;
 }
+
 void Shop(){
+	
 	// check if at shop location
 	if  ( !(location.x == 1 && location.y == 0) )
 		return;
@@ -123,20 +126,63 @@ void Shop(){
 		ItemNumber++;
 	}
 	in();
-	//sale:
+	int New;
+	sale:
 		printpause("Which?");
-		if (entry == '1'){
-			//if (SaleOK(pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price))
-				player.inven.WeaponTotal++;
-				player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
-				player.inven.Weapon[(player.inven.WeaponTotal-1)] = WeaponList[0];
-				player.Wielding = pWeapon[player.inven.Weapon[(player.inven.WeaponTotal-1)]]; //whew
+		switch (entry){
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+				switch (entry){
+					case '1':
+						switch(SaleOK(pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price)){
+							case 0:
+								goto sale;
+							case 1:
+								break;
+							case 2:
+								goto sale;
+						}
 
-				printf("You arm yourself with %s.",player.Wielding->name);
-				nl();
-			}
+						player.inven.WeaponTotal++;
+						player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
+						player.inven.Weapon[(player.inven.WeaponTotal-1)] = WeaponList[0];
+						player.Wielding = pWeapon[player.inven.Weapon[(player.inven.WeaponTotal-1)]]; //whew
 
-		
-}
+						printf("You arm yourself with %s.",player.Wielding->name);
+						nl();
+						break; // weapon do
+					case '2':
+						New = ArmorList[0];
+					case '3':
+						New = ArmorList[1];
+					case '4':
+						New =  ArmorList[2];
+
+						switch(SaleOK(pArmor[New]->name,pArmor[New]->price)){
+							case 0:
+								goto sale;
+							case 1:
+								break;
+							case 2:
+								return;
+						}
+
+						player.inven.ArmorTotal++;
+						player.inven.Armor = realloc(player.inven.Armor,player.inven.ArmorTotal);
+
+						player.inven.Armor[(player.inven.ArmorTotal-1)] = New;
+						player.Wearing = pArmor[New]; //whew
+						DoAC();
+
+						printf("You wear %s.",player.Wearing->name);
+						nl();
+						break; // armor do
+					} // switch 2
+			default: // invalid selection 
+				printpause("Come again.");
+		} // switch 1 valid selection
+} // shop()
 
 //end

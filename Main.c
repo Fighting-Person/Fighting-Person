@@ -79,6 +79,7 @@ int main(){
 					continue;
 				case '`': //cheat
 					player.Wielding = pWeapon[DAGGER];
+					player.Wearing = pArmor[CHAIN_MAIL];
 					continue;
 				}
 		} while (gameloop && player.alive); // end switch
