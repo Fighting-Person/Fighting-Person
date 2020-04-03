@@ -41,9 +41,9 @@ void Attack(sheet *attacker, sheet *defender){ // called from Combat()
 		in();
 		return;
 		}
-	int damage = atleast(0,rollmod(attacker->Wielding->damage, attacker->ability[str]));
+	int damage = atleast(0,rollmod(attacker->Weapon->damage, attacker->ability[str]));
 	printf("%s %s %s for %i damage!", 
-		attacker->name, attacker->Wielding->verb, defender->name, damage);
+		attacker->name, attacker->Weapon->verb, defender->name, damage);
 	in();
 	defender->hp.current -= damage;
 	if (defender->hp.current <= 0){
@@ -105,7 +105,7 @@ void buildabear(struct MonsterData *fill, sheet* opponent){ // called from Encou
 	opponent->hp.max = opponent->hp.current = 
 		atleast(1, (multdiemod(opponent->level,
 		opponent->size,opponent->ability[con])));
-	opponent->Wielding = pWeapon[fill->weapon];
+	opponent->Weapon = pWeapon[fill->weapon];
 	opponent->xp = fill->xp;
 	opponent->alive = true;
 }

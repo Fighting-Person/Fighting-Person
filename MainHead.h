@@ -15,6 +15,7 @@ enum ztype {CAMP, TOWN, HOME};
 
 typedef const char* string;
 
+// data structs
 struct MonsterData {
 	string name;
 	int size;
@@ -27,22 +28,16 @@ struct MonsterData {
 	int weapon;
 int armor;
 	int shield;
-};
+}; // monster
 
 struct WeaponData {
 	string verb;
 	int damage; // 1x die
-	int price; // gp
-	int weight; // lbs
-	string name;
-};
+}; // weapon
 
 struct ArmorData{
-	string name;
 	int ac;
-	int weight;
-	int price;
-}; // Armordata
+}	; // Armordata
 
 struct ShieldData{
 string name;
@@ -50,6 +45,14 @@ int ac;
 int weight;
 int price;
 }; // ShieldData
+
+struct ItemData{ // for shops & inventory
+	string name;
+	int value;
+	int weight;
+	char genus;
+	int species;
+} ; // item
 
 typedef struct { //sheet
 	struct {
@@ -65,25 +68,22 @@ typedef struct { //sheet
 	int gp;
 	int size;
 	bool alive;
-	struct { //inv
-		int* Weapon;
-		int WeaponTotal;
-		int* Armor;
-		int ArmorTotal;
-		int* Shield;
-		int ShieldTotal;
-		} inven;
-	struct WeaponData* Wielding;
-	struct ArmorData* Wearing;
-struct ShieldData *LeftHand; // dunno
-	} sheet;
+	int* Inventory;
+	int InventoryTotal;
+	struct ItemData* Wielding;
+	struct WeaponData* Weapon;
+	struct ItemData* Wearing;
+	struct ArmorData* Armor;
+	struct ItemData* Carrying;
+	struct ShieldData* Shield; // dunno
+} sheet;
 
 struct LocationType {
 	string description;
 	int EncounterRate;
 	bool move;
 	char zmode; // 0313
-} ;
+} ; // locationdata
 
 typedef struct {
 	int x;
@@ -122,7 +122,9 @@ void buildplayer(void); // 0229
 void LoadWeaponArray(void); //0322
 void LoadMonsterArray(void); //0322
 void LoadArmorArray(void); //0331
-void DoAC(void);
+void LoadItemArray(void); //0403
+void CalcWield(void); 
+void CalcWear(void);
 
 // globals
 
@@ -132,13 +134,18 @@ char entry;
 coordinates location;
 struct LocationType matrix[worldsize][worldsize]; // 03/14
 
+// enum data
 enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};
 enum monsters {BAT,FIRE_BEETLE,GOBLIN, M_ENUMSIZE};
-enum armor {NONE, LEATHER, CHAIN_SHIRT, CHAIN_MAIL, A_ENUMSIZE};
+enum armor {CLOTHES, LEATHER, CHAINSHIRT, CHAINMAIL, A_ENUMSIZE};
+enum items {ITEM_NONE, ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, ITEM_CHAINMAIL, I_ENUMSIZE};
+enum ItemGenus {WEAPON, ARMOR, SHIELD};
 
+// struct arrays data
 struct WeaponData *pWeapon[W_ENUMSIZE];
 struct MonsterData *pMonster[M_ENUMSIZE];
 struct ArmorData *pArmor[A_ENUMSIZE];
+struct ItemData *pItem[I_ENUMSIZE];
 
 sheet player;
 

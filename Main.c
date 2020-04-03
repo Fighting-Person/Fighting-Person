@@ -11,6 +11,7 @@ int main(){
 		LoadWeaponArray();
 		LoadMonsterArray();
 		LoadArmorArray();
+		LoadItemArray();
 	restart:
 		buildplayer();
 		location.x=location.y=0;
@@ -78,8 +79,10 @@ int main(){
 					ReportInventory();
 					continue;
 				case '`': //cheat
-					player.Wielding = pWeapon[DAGGER];
-					player.Wearing = pArmor[CHAIN_MAIL];
+					player.Wielding = pItem[ITEM_DAGGER];
+					CalcWield();
+					player.Wearing =pItem[ITEM_CHAINMAIL];
+					CalcWear();
 					continue;
 				}
 		} while (gameloop && player.alive); // end switch
@@ -105,11 +108,6 @@ void printprompt(string line){
 	printf("%s\n",line);
 	return;
 }
-/*void printroll(string name, string type, int roll){ 
-	printf("%s %s roll is %i.", name, type, roll);
-	in();
-	return;
-}*/
 void playerstatus(){
 	printf("Level %i",player.level);
 	nl();

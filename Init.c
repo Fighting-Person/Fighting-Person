@@ -18,18 +18,24 @@ struct MonsterData mdFireBeetle = {"Fire Beetle",SMALL,13,1,-1,0,1,10,BITE6,0,0}
 struct MonsterData mdGoblin = {"Goblin", SMALL, 15, 2,-1, 2, 0, 50, SCIMITAR/*,LEATHER,*/};
 // add monster + enum
 
-struct WeaponData wdFist = {"punches",2,0,0,"fist"};
-struct WeaponData wdBite = {"bites",1,0,0}; 
-struct WeaponData wdBite6 = {"bites", 6,0,0};
-struct WeaponData wdDagger = {"stabs",4,30,1,"dagger"};
+struct WeaponData wdFist = {"punches",2};
+struct WeaponData wdBite = {"bites",1}; 
+struct WeaponData wdBite6 = {"bites", 6};
+struct WeaponData wdDagger = {"stabs",4};
 struct WeaponData wdScimitar = {"slashes", 6};
 // add weapon + enum
 
-struct ArmorData adNone = {"no armor",10,0,0};
-struct ArmorData adLeather = {"leather armor", 11, 10, 10};
-struct ArmorData adChainshirt = {"chain shirt", 13, 20, 50};
-struct ArmorData adChainmail = {"chain mail", 16, 55, 75};
+struct ArmorData adClothes = {10}; // "clothes"
+struct ArmorData adLeather = {11};
+struct ArmorData adChainshirt = {13};
+struct ArmorData adChainmail = {16};
 // add Armor + enum
+
+struct ItemData idNone = {"nothing",0,0,0};
+struct ItemData idDagger = {"dagger", 30, 1, WEAPON, DAGGER};
+struct ItemData idLeather = {"leather armor", 10, 10, ARMOR, LEATHER};
+struct ItemData idChainshirt = {"chain shirt", 50, 20, ARMOR, CHAINSHIRT};
+struct ItemData idChainmail = {"chain mail", 75, 55, ARMOR, CHAINMAIL};
 
 void LoadWeaponArray(void){
 	pWeapon[FIST] = &wdFist;
@@ -46,35 +52,47 @@ void LoadMonsterArray(void){
 	// add monster array
 }
 void LoadArmorArray(void){
-	pArmor[NONE] = &adNone;
+	pArmor[CLOTHES] = &adClothes;
 	pArmor[LEATHER] = &adLeather;
-	pArmor[CHAIN_SHIRT] = &adChainshirt;
-	pArmor[CHAIN_MAIL] = &adChainmail;
+	pArmor[CHAINSHIRT] = &adChainshirt;
+	pArmor[CHAINMAIL] = &adChainmail;
 	// add Armor array
 }
-// Generate Char
-void DoAC(){
-	player.ac = player.Wearing->ac + player.ability[dex];
+void LoadItemArray(void){
+	pItem[ITEM_NONE] = &idNone;
+	pItem[ITEM_DAGGER] = &idDagger;	
+	pItem[ITEM_LEATHER] = &idLeather;
+	pItem[ITEM_CHAINSHIRT] = &idChainshirt;
+	pItem[ITEM_CHAINMAIL] = &idChainmail;
+};
+
+void CalcWear(){
+	player.Armor = pArmor[player.Wearing->species];
+
+	player.ac = player.Armor->ac + player.ability[dex];
+}
+void CalcWield(){ 
+
+	player.Weapon = pWeapon[player.Wielding->species];
 }
 void buildplayer(){ // from main()
 	player.alive = true;
 	player.name = "Player";
 	player.size = MEDIUM;
 	player.level = 1;
-	//rollprimary();
 	for ( int x =0;x<NUM_ABILITY;x++){
 		player.ability[x] = BASE_ABILITY;
 	} 
-	//primarynamemod(&player);
 	player.hp.max = player.hp.current = player.size /*+ player.ability[con]*/;
 	player.xp = 0;
 	player.gp = STARTING_GOLD;
-	player.Wielding = pWeapon[FIST];
-	player.inven.WeaponTotal = 1;
-	player.inven.Weapon = calloc(player.inven.WeaponTotal,sizeof(int));
-	player.inven.Weapon[(player.inven.WeaponTotal-1)] = FIST;
-	player.Wearing = pArmor[NONE];
-	DoAC();
+	player.Wielding = &idNone; // fist
+	CalcWield();
+	player.Wearing = &idNone; // clothes
+	CalcWear();
+	player.InventoryTotal = 1;
+	player.Inventory = calloc(player.InventoryTotal,sizeof(int));
+	player.Inventory[(player.InventoryTotal-1)] = ITEM_NONE;
 	return;
 }
 

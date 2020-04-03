@@ -111,21 +111,17 @@ void Shop(){
 	if  ( !(location.x == 1 && location.y == 0) )
 		return;
 	printpause("Welcome to the shop. :)");
+	int list[] = {ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, ITEM_CHAINMAIL};
+	int loop = sizeof(list)/sizeof(list[0]);
 	int ItemNumber = 1;
-	// do weapons
-	int WeaponList[] = {DAGGER};
-	printf("#%i %s - %i gp",ItemNumber,pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price);
-	nl();
-	ItemNumber++;
-	// do armor
-	int ArmorList[] = {LEATHER, CHAIN_SHIRT, CHAIN_MAIL};
-	int loop = sizeof(ArmorList)/sizeof(ArmorList[0]);
+
 	for (int x = 0; x < loop; x++){
-		printf("#%i %s - %i gp",ItemNumber,pArmor[ArmorList[x]]->name,pArmor[ArmorList[x]]->price);
+		printf("#%i %s - %i gp",x+1, pItem[list[x]]->name ,pItem[list[x]]->value );
 		nl();
 		ItemNumber++;
 	}
-	in();
+	
+	/*in();
 	int New;
 	sale:
 		printpause("Which?");
@@ -182,7 +178,7 @@ void Shop(){
 					} // switch 2
 			default: // invalid selection 
 				printpause("Come again.");
-		} // switch 1 valid selection
+		} // switch 1 valid selection*/
 } // shop()
 
 //end
