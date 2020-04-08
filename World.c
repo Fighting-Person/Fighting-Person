@@ -8,7 +8,7 @@
 void FillLocation(struct LocationType*,int ,int);
 void printboundary(string);
 bool InBounds(string, coordinates);
-int SaleOK(string , int );
+bool SaleOK( int );
 
 
 // LocationType {string name, int encounterrate, int move, int zmode (camp,town,home)}
@@ -91,94 +91,68 @@ void Move(){
 
 	return;
 }
-int SaleOK(string name, int price){
-	printf("Buy %s?",name);
+bool SaleOK(int item){
+	printf("Buy %s?",pItem[item]->name);
 	in();
 	if (entry == 'y'){
-		if (player.gp < price){
+		if (player.gp < pItem[item]->value){
 			printpause("Insufficient funds.");
-			return 0;
+			return 0; 
 		}
-		player.gp -= price;
+		player.gp -= pItem[item]->value;
 		return 1;
 	}
-	return 2;
+	return 0;
 }
 
 void Shop(){
-	
 	// check if at shop location
 	if  ( !(location.x == 1 && location.y == 0) )
 		return;
 	printpause("Welcome to the shop. :)");
+
 	int list[] = {ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, ITEM_CHAINMAIL};
+
 	int loop = sizeof(list)/sizeof(list[0]);
 	int ItemNumber = 1;
-
 	for (int x = 0; x < loop; x++){
-		printf("#%i %s - %i gp",x+1, pItem[list[x]]->name ,pItem[list[x]]->value );
+		printf("#%i %s - %i gp",ItemNumber, pItem[list[x]]->name ,pItem[list[x]]->value );
 		nl();
 		ItemNumber++;
 	}
-	
-	/*in();
-	int New;
-	sale:
-		printpause("Which?");
-		switch (entry){
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-				switch (entry){
-					case '1':
-						switch(SaleOK(pWeapon[WeaponList[0]]->name,pWeapon[WeaponList[0]]->price)){
-							case 0:
-								goto sale;
-							case 1:
-								break;
-							case 2:
-								goto sale;
-						}
 
-						player.inven.WeaponTotal++;
-						player.inven.Weapon = realloc(player.inven.Weapon,player.inven.WeaponTotal);
-						player.inven.Weapon[(player.inven.WeaponTotal-1)] = WeaponList[0];
-						player.Wielding = pWeapon[player.inven.Weapon[(player.inven.WeaponTotal-1)]]; //whew
+	printpause("Which?");
+	int selected=0;
+	switch(entry){
+		case 49: selected = list[0]; break;
+		case 50: selected = list[1]; break;
+		case 51: selected = list[2]; break;
+		case 52: selected = list[3]; break;
+		default: printpause("Invalid.");
+	}
 
-						printf("You arm yourself with %s.",player.Wielding->name);
-						nl();
-						break; // weapon do
-					case '2':
-						New = ArmorList[0];
-					case '3':
-						New = ArmorList[1];
-					case '4':
-						New =  ArmorList[2];
+	if (!selected)
+		return;
+	if(!SaleOK(selected))
+		return;
 
-						switch(SaleOK(pArmor[New]->name,pArmor[New]->price)){
-							case 0:
-								goto sale;
-							case 1:
-								break;
-							case 2:
-								return;
-						}
+	AddToInventory(selected);
 
-						player.inven.ArmorTotal++;
-						player.inven.Armor = realloc(player.inven.Armor,player.inven.ArmorTotal);
+	switch(pItem[selected]->genus){
+		case WEAPON:
+			printpause("Wield?");
+			if (entry == 'y'){
+				CalcWield(pItem[selected]);
+			}
+			break;
+		case ARMOR:
+		printpause("Wear?");
+			if (entry == 'y'){
+				CalcWear(pItem[selected]);
+			}
+			break;
+	} // end wield/wear
 
-						player.inven.Armor[(player.inven.ArmorTotal-1)] = New;
-						player.Wearing = pArmor[New]; //whew
-						DoAC();
-
-						printf("You wear %s.",player.Wearing->name);
-						nl();
-						break; // armor do
-					} // switch 2
-			default: // invalid selection 
-				printpause("Come again.");
-		} // switch 1 valid selection*/
 } // shop()
 
 //end

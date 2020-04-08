@@ -37,7 +37,7 @@ struct WeaponData {
 
 struct ArmorData{
 	int ac;
-}	; // Armordata
+}; // armor
 
 struct ShieldData{
 string name;
@@ -55,27 +55,27 @@ struct ItemData{ // for shops & inventory
 } ; // item
 
 typedef struct { //sheet
+	string name;
+	bool alive;
 	struct {
 		int max;
 		int current;
 		} hp;
 	int ability[NUM_ABILITY];
-	int initiative;
-	string name;
+	int size;
 	int ac;
 	int xp;
 	int level;
 	int gp;
-	int size;
-	bool alive;
+	int initiative;
 	int* Inventory;
 	int InventoryTotal;
 	struct ItemData* Wielding;
-	struct WeaponData* Weapon;
 	struct ItemData* Wearing;
-	struct ArmorData* Armor;
 	struct ItemData* Carrying;
-	struct ShieldData* Shield; // dunno
+	struct WeaponData* Weapon;	
+	struct ArmorData* Armor;
+	struct ShieldData* Shield;
 } sheet;
 
 struct LocationType {
@@ -100,7 +100,11 @@ void nl(void);	//0308
 void playerstatus(void); 
 void printcoordinates(void); //0316
 void printHP(void); // 0319
-void ReportInventory(void); //0326
+void ReportEquipment(void); //0326
+void CalcWield(struct ItemData*); //040x
+void CalcWear(struct ItemData*); //040x
+void ReportInventory(void); //0408
+void AddToInventory(int); //0408
 
 // World.h
 void buildworld(void); //0306
@@ -123,8 +127,6 @@ void LoadWeaponArray(void); //0322
 void LoadMonsterArray(void); //0322
 void LoadArmorArray(void); //0331
 void LoadItemArray(void); //0403
-void CalcWield(void); 
-void CalcWear(void);
 
 // globals
 
@@ -132,7 +134,7 @@ char buffer[150];
 char entry;
 
 coordinates location;
-struct LocationType matrix[worldsize][worldsize]; // 03/14
+struct LocationType matrix[worldsize][worldsize];
 
 // enum data
 enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};

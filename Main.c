@@ -17,6 +17,7 @@ int main(){
 		location.x=location.y=0;
 		printLocationShort();
 		gameloop = true;
+		int new;
 		do{
 			printpause("*");
 			switch(entry) {
@@ -30,6 +31,7 @@ int main(){
 					gameloop = false;
 					break;
 				case 'l': //look
+					printLocationShort();
 					continue;
 				case 'u': // 0301
 				case 'v': 
@@ -52,7 +54,7 @@ int main(){
 					printHP();
 					continue;
 				case 'e':
-					//to do
+					ReportEquipment();
 					continue;
 				case 'z': //sleep.
 					if (AT.zmode == HOME){
@@ -79,10 +81,12 @@ int main(){
 					ReportInventory();
 					continue;
 				case '`': //cheat
-					player.Wielding = pItem[ITEM_DAGGER];
-					CalcWield();
-					player.Wearing =pItem[ITEM_CHAINMAIL];
-					CalcWear();
+					new = ITEM_DAGGER;
+					AddToInventory(new);
+					CalcWield(pItem[new]);
+					new = ITEM_CHAINMAIL;
+					AddToInventory(new);
+					CalcWear(pItem[new]);
 					continue;
 				}
 		} while (gameloop && player.alive); // end switch
@@ -138,10 +142,22 @@ void printHP(){
 	nl();
 	return;
 }
-void ReportInventory(void){
+void ReportEquipment(void){
 	printf("Wielding %s", player.Wielding->name);
 	nl();
 	printf("Wearing %s", player.Wearing->name);
 	nl();
+}
+void ReportInventory(void){
+	printf("Inventory total = %i",player.InventoryTotal);
+	nl();
+	for(int x =1; x < player.InventoryTotal+1; x++){
+		printf("%s", pItem[player.Inventory[x]]->name);
+		nl();
+	}
+}
+void AddToInventory(int new){
+	player.Inventory = realloc(player.Inventory,++player.InventoryTotal);
+	player.Inventory[player.InventoryTotal] = new;
 }
 //end

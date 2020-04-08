@@ -66,14 +66,25 @@ void LoadItemArray(void){
 	pItem[ITEM_CHAINMAIL] = &idChainmail;
 };
 
-void CalcWear(){
-	player.Armor = pArmor[player.Wearing->species];
+void CalcWear(struct ItemData* idArmor){
+	player.Wearing = idArmor;
 
-	player.ac = player.Armor->ac + player.ability[dex];
+	player.Armor = pArmor[idArmor->species];
+	player.ac = pArmor[idArmor->species]->ac + player.ability[dex];
+
+	printf("You don %s.",idArmor->name);
+	nl();
 }
-void CalcWield(){ 
+void CalcWield(struct ItemData* idWeapon){ 
+	player.Wielding = idWeapon;
 
-	player.Weapon = pWeapon[player.Wielding->species];
+	player.Weapon = pWeapon[idWeapon->species];
+
+	/*if (player.Weapon == pWeapon[0])
+		return;*/
+
+	printf("You arm yourself with %s.",idWeapon->name);
+	nl();
 }
 void buildplayer(){ // from main()
 	player.alive = true;
@@ -86,13 +97,11 @@ void buildplayer(){ // from main()
 	player.hp.max = player.hp.current = player.size /*+ player.ability[con]*/;
 	player.xp = 0;
 	player.gp = STARTING_GOLD;
-	player.Wielding = &idNone; // fist
-	CalcWield();
-	player.Wearing = &idNone; // clothes
-	CalcWear();
-	player.InventoryTotal = 1;
-	player.Inventory = calloc(player.InventoryTotal,sizeof(int));
-	player.Inventory[(player.InventoryTotal-1)] = ITEM_NONE;
+	CalcWield(&idNone);
+	CalcWear(&idNone);
+	player.InventoryTotal = 0;
+	player.Inventory = calloc(1,sizeof(int)); //since don't know when 1st item will be added.
+	player.Inventory[0] = ITEM_NONE; // 0
 	return;
 }
 
