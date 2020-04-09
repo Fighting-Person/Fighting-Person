@@ -35,16 +35,8 @@ struct WeaponData {
 	int damage; // 1x die
 }; // weapon
 
-struct ArmorData{
-	int ac;
-}; // armor
-
-struct ShieldData{
-string name;
-int ac;
-int weight;
-int price;
-}; // ShieldData
+int armor_ac[];
+#define SHIELD_AC 2
 
 struct ItemData{ // for shops & inventory
 	string name;
@@ -74,8 +66,7 @@ typedef struct { //sheet
 	struct ItemData* Wearing;
 	struct ItemData* Carrying;
 	struct WeaponData* Weapon;	
-	struct ArmorData* Armor;
-	struct ShieldData* Shield;
+	int Armor;
 } sheet;
 
 struct LocationType {
@@ -105,6 +96,7 @@ void CalcWield(struct ItemData*); //040x
 void CalcWear(struct ItemData*); //040x
 void ReportInventory(void); //0408
 void AddToInventory(int); //0408
+void CalcCarry(int);
 
 // World.h
 void buildworld(void); //0306
@@ -140,7 +132,8 @@ struct LocationType matrix[worldsize][worldsize];
 enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};
 enum monsters {BAT,FIRE_BEETLE,GOBLIN, M_ENUMSIZE};
 enum armor {CLOTHES, LEATHER, CHAINSHIRT, CHAINMAIL, A_ENUMSIZE};
-enum items {ITEM_NONE, ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, ITEM_CHAINMAIL, I_ENUMSIZE};
+enum items {ITEM_NONE, ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, 
+			ITEM_CHAINMAIL, ITEM_SHIELD, I_ENUMSIZE};
 enum ItemGenus {WEAPON, ARMOR, SHIELD};
 
 // struct arrays data

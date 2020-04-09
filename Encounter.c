@@ -125,9 +125,8 @@ void Encounter(){ // called from Move()
 	// define
 	buildabear(pMonster[roll],&opponent);
 
-	printf("Encounter %s!", opponent.name);
-	in();
 	encounter = true;
+	printf("Encounter %s!", opponent.name);
 	do{
 		printpause("*");
 		switch (entry){
@@ -142,14 +141,14 @@ void Encounter(){ // called from Move()
 				gameloop = false;
 				break;
 			case 'l': // look
-			ShowOpponentStatus(&opponent);	
-			continue;
+				ShowOpponentStatus(&opponent);	
+				continue;
 			case 'u': // 0301
 			case 'v': 
 			case 'f': 
 			case 'j':
-			printprompt("You're currently in an encounter.");
-			continue;
+				printprompt("You're currently in an encounter.");
+				continue;
 			case 'p': // show primary stats
 				showprimary();
 				continue;

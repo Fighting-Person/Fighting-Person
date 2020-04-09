@@ -147,10 +147,10 @@ void ReportEquipment(void){
 	nl();
 	printf("Wearing %s", player.Wearing->name);
 	nl();
+	printf("Carrying %s",player.Carrying->name);
+	nl();
 }
 void ReportInventory(void){
-	printf("Inventory total = %i",player.InventoryTotal);
-	nl();
 	for(int x =1; x < player.InventoryTotal+1; x++){
 		printf("%s", pItem[player.Inventory[x]]->name);
 		nl();
