@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <windows.h>
+
 #define worldsize 6 //0314
 #define AT matrix[location.x][location.y]
 // define end
@@ -129,11 +131,11 @@ coordinates location;
 struct LocationType matrix[worldsize][worldsize];
 
 // enum data
-enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, W_ENUMSIZE};
+enum weapons {FIST, BITE, BITE6, DAGGER, SCIMITAR, LONGSWORD, W_ENUMSIZE};
 enum monsters {BAT,FIRE_BEETLE,GOBLIN, M_ENUMSIZE};
 enum armor {CLOTHES, LEATHER, CHAINSHIRT, CHAINMAIL, A_ENUMSIZE};
 enum items {ITEM_NONE, ITEM_DAGGER, ITEM_LEATHER, ITEM_CHAINSHIRT, 
-			ITEM_CHAINMAIL, ITEM_SHIELD, I_ENUMSIZE};
+			ITEM_CHAINMAIL, ITEM_SHIELD, ITEM_LONGSWORD, I_ENUMSIZE};
 enum ItemGenus {WEAPON, ARMOR, SHIELD};
 
 // struct arrays data

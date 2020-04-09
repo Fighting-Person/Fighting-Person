@@ -9,7 +9,7 @@ bool encounter;
 
 // toc
 void Combat(sheet*,sheet*);
-void initiative();
+void initiative(sheet*);
 void Attack(sheet*, sheet*);
 void buildabear(struct MonsterData*, sheet*); //0303
 int getbonus(int);
@@ -116,17 +116,17 @@ bool escape(sheet* opponent){
 		return true;
 	return false;
 }
-void Encounter(){ // called from Move()
-
+void Encounter(void){ // called from Move()
+	// declare
 	sheet opponent;
-
-	// determine monster
+	// determine
 	int roll = rollmod(M_ENUMSIZE, 0) - 1;
 	// define
 	buildabear(pMonster[roll],&opponent);
 
 	encounter = true;
 	printf("Encounter %s!", opponent.name);
+	nl();
 	do{
 		printpause("*");
 		switch (entry){

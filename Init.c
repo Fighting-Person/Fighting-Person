@@ -1,4 +1,9 @@
 // Init.c
+// defines
+// struct monsterdata weapon item
+// array weapon monster armor item
+// calcwield wear carry
+// buildplayer
 
 #include "MainHead.h"
 
@@ -7,36 +12,36 @@
 #define MEDIUM 8
 #define LARGE 10
 
-//#define BASE_ARMOR 10
 #define BASE_ABILITY 0
-
 #define STARTING_GOLD 10 * multdiemod(5,4,0)
 
-// monsterdata 
-struct MonsterData mdBat = {"Bat",TINY,12,1,-4,2,-1,10,BITE,0,0};
-struct MonsterData mdFireBeetle = {"Fire Beetle",SMALL,13,1,-1,0,1,10,BITE6,0,0};
-struct MonsterData mdGoblin = {"Goblin", SMALL, 15, 2,-1, 2, 0, 50, SCIMITAR/*,LEATHER,*/};
-// add monster + enum
+struct MonsterData 
+	mdBat = {"Bat",TINY,12,1,-4,2,-1,10,BITE,0,0},
+	mdFireBeetle = {"Fire Beetle",SMALL,13,1,-1,0,1,10,BITE6,0,0},
+	mdGoblin = {"Goblin", SMALL, 15, 2,-1, 2, 0, 50, SCIMITAR/*,LEATHER,*/};
+	// add monster + enum
 
-struct WeaponData wdFist = {"punches",2};
-struct WeaponData wdBite = {"bites",1}; 
-struct WeaponData wdBite6 = {"bites", 6};
-struct WeaponData wdDagger = {"stabs",4};
-struct WeaponData wdScimitar = {"slashes", 6};
-// add weapon + enum
+struct WeaponData 
+	wdFist = {"punches",2},
+	wdBite = {"bites",1},
+	wdBite6 = {"bites", 6},
+	wdDagger = {"stabs",4},
+	wdScimitar = {"slashes", 6},
+	wdLongsword = {"slashes", 8};
+	// add weapon + enum
 
-/*struct ArmorData adClothes = {10}; // "clothes"
-struct ArmorData adLeather = {11};
-struct ArmorData adChainshirt = {13};
-struct ArmorData adChainmail = {16};
-// add Armor + enum*/
+struct ItemData 
+	idNone = {"nothing",0,0,0},
 
-struct ItemData idNone = {"nothing",0,0,0};
-struct ItemData idDagger = {"dagger", 30, 1, WEAPON, DAGGER};
-struct ItemData idLeather = {"leather armor", 10, 10, ARMOR, LEATHER};
-struct ItemData idChainshirt = {"chain shirt", 50, 20, ARMOR, CHAINSHIRT};
-struct ItemData idChainmail = {"chain mail", 75, 55, ARMOR, CHAINMAIL};
-struct ItemData idShield = {"shield", 0,0,SHIELD,0};
+	idDagger = {"dagger", 30, 1, WEAPON, DAGGER},
+	idLongsword = {"longsword", 25, 0, WEAPON, LONGSWORD},
+
+	idLeather = {"leather armor", 10, 10, ARMOR, LEATHER},
+	idChainshirt = {"chain shirt", 50, 20, ARMOR, CHAINSHIRT},
+	idChainmail = {"chain mail", 75, 55, ARMOR, CHAINMAIL},
+
+	idShield = {"shield", 0,0,SHIELD,0};
+	// add item
 
 void LoadWeaponArray(void){
 	pWeapon[FIST] = &wdFist;
@@ -44,6 +49,7 @@ void LoadWeaponArray(void){
 	pWeapon[BITE6] = &wdBite6;
 	pWeapon[DAGGER] = &wdDagger;
 	pWeapon[SCIMITAR] = &wdScimitar;
+	pWeapon[LONGSWORD] = &wdLongsword;
 	// add weapon array
 }
 void LoadMonsterArray(void){
@@ -53,11 +59,6 @@ void LoadMonsterArray(void){
 	// add monster array
 }
 void LoadArmorArray(void){
-	/*pArmor[CLOTHES] = &adClothes;
-	pArmor[LEATHER] = &adLeather;
-	pArmor[CHAINSHIRT] = &adChainshirt;
-	pArmor[CHAINMAIL] = &adChainmail;
-	// add Armor array*/
 	armor_ac[CLOTHES] = 10;
 	armor_ac[LEATHER] = 11;
 	armor_ac[CHAINSHIRT] = 13;
@@ -66,6 +67,7 @@ void LoadArmorArray(void){
 void LoadItemArray(void){
 	pItem[ITEM_NONE] = &idNone;
 	pItem[ITEM_DAGGER] = &idDagger;	
+	pItem[ITEM_LONGSWORD] = &idLongsword;
 	pItem[ITEM_LEATHER] = &idLeather;
 	pItem[ITEM_CHAINSHIRT] = &idChainshirt;
 	pItem[ITEM_CHAINMAIL] = &idChainmail;
@@ -94,10 +96,8 @@ void CalcCarry(int new){
 		printf("You carry shield."); nl();
 		return;
 	}
-
-	printpause("Error - Carry.");
 }
-void buildplayer(){ // from main()
+void buildplayer(void){ // from main()
 	player.alive = true;
 	player.name = "Player";
 	player.size = MEDIUM;
@@ -113,11 +113,11 @@ void buildplayer(){ // from main()
 	player.Inventory = calloc(1,sizeof(int)); //since don't know when 1st item will be added.
 	player.Inventory[0] = ITEM_NONE; // 0
 
-	player.Wielding = &idNone;
-	player.Weapon = pWeapon[FIST];
+	player.Wielding = &idLongsword;
+	player.Weapon = pWeapon[LONGSWORD];
 
-	player.Wearing = &idNone;
-	player.Armor = CLOTHES;
+	player.Wearing = &idChainmail;
+	player.Armor = CHAINMAIL;
 
 	player.ac = armor_ac[player.Armor] + player.ability[dex];
 

@@ -81,7 +81,7 @@ int main(){
 					ReportInventory();
 					continue;
 				case '`': //cheat
-					new = ITEM_DAGGER;
+					new = ITEM_LONGSWORD;
 					AddToInventory(new);
 					CalcWield(pItem[new]);
 					new = ITEM_CHAINMAIL;
@@ -95,12 +95,12 @@ int main(){
 }	
 // end main
 
-void in(){
+void in(void){
 	gets(buffer);
 	entry = buffer[0];
 	return;
 }
-void nl(){
+void nl(void){
 	printf("\n");
 }
 void printpause(string line){
@@ -112,7 +112,7 @@ void printprompt(string line){
 	printf("%s\n",line);
 	return;
 }
-void playerstatus(){
+void playerstatus(void){
 	printf("Level %i",player.level);
 	nl();
 	printf("HP %i/%i", player.hp.current,player.hp.max); 
@@ -125,7 +125,7 @@ void playerstatus(){
 	nl();
 	return;
 }
-void showprimary(){
+void showprimary(void){
 	string name[]={"Strength","Dexterity","Constitution"};
 	for (int x=0;x<NUM_ABILITY;x++){
 		printf("%s %i",name[x],player.ability[x]); // to fix
@@ -137,7 +137,7 @@ void printcoordinates(void){
 	printf("%s. %i, %i",matrix[location.x][location.y].description,location.x,location.y);
 	nl();
 }
-void printHP(){
+void printHP(void){
 	printf("%i/%i hp",player.hp.current,player.hp.max);
 	nl();
 	return;

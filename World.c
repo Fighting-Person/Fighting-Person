@@ -25,7 +25,7 @@ void FillLocation(struct LocationType* fill, int x, int y){
 	LOCATION.zmode = fill->zmode;
 	return; 
 }
-void buildworld(){
+void buildworld(void){
 	// fill woods for y = 3 - 5
 	for(int x=0;x<worldsize;x++){
 		for(int y=3;y<worldsize;y++){
@@ -45,7 +45,7 @@ void buildworld(){
 	return;
 }
 
-void printLocationShort(){
+void printLocationShort(void){
 	printf("%s.",matrix[location.x][location.y].description);
 	nl();
 }
@@ -61,7 +61,7 @@ bool InBounds(string direction, coordinates supposed){
 	}
 	return true;
 }
-void Move(){
+void Move(void){
 	string direction;
 	coordinates new = {0,0};
 	switch(entry){
@@ -105,7 +105,7 @@ bool SaleOK(int item){
 	return 0;
 }
 
-void Shop(){
+void Shop(void){
 	// check if at shop location
 	if  ( !(location.x == 1 && location.y == 0) )
 		return;
